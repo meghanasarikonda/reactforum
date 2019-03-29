@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from "axios";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 import Search from './Search';
+import User from './User';
+import Post from './Post';
 
 class App extends Component {
 
@@ -56,6 +58,8 @@ class App extends Component {
   }
 
   handleUsernameClick(e) {
+    alert('username first')
+    e.stopPropagation();
     console.log(e.target.dataset.id, 'id', this.state.userArr)
     let uniqueUser = async () => {
       let userdata = await axios.get(`https://jsonplaceholder.typicode.com/users/${e.target.dataset.id}`);
@@ -67,7 +71,6 @@ class App extends Component {
     uniqueUser();
     e.preventDefault();
     this.setState({
-      postmodal: false,
       modal: true
     })
     console.log(e.target.dataset.id, 'id')
@@ -86,6 +89,7 @@ class App extends Component {
   }
 
   handlePostClick(e) {
+    alert('post first')
     e.preventDefault();
     console.log('postClick', e.currentTarget.dataset.userid);
     this.setState({
@@ -135,7 +139,7 @@ class App extends Component {
           </ListGroupItem>
         )}
         </ListGroup>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+        {/* <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           <ModalHeader >User details</ModalHeader>
           <ModalBody>
             username - {this.state.userdata.username}
@@ -148,9 +152,13 @@ class App extends Component {
             <Button color="primary" onClick={this.toggle}>Ok</Button>{' '}
             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
-        </Modal>
+        </Modal> */}
 
-        <Modal isOpen={this.state.postmodal && !this.state.modal} toggle={this.togglepost}>
+        <User modal={this.state.modal} toggle={this.toggle} userdata={this.state.userdata} />
+
+        <Post modal={this.state.postmodal} toggle={this.togglepost} postdata={this.state.postdata} comments={this.state.comments} postbody={this.postbody}/>
+
+        {/* <Modal isOpen={this.state.postmodal && !this.state.modal} toggle={this.togglepost}>
         <ModalHeader >Post details</ModalHeader>
           <ModalBody>
           {this.postbody()}
@@ -169,7 +177,8 @@ class App extends Component {
             <Button color="primary" onClick={this.togglepost}>Ok</Button>{' '}
             <Button color="secondary" onClick={this.togglepost}>Cancel</Button>
           </ModalFooter>
-        </Modal>
+        </Modal> */}
+      
       </div>
     );
   }

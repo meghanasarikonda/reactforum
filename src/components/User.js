@@ -1,20 +1,20 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem } from 'reactstrap';
 
-function User ({props}) {
+function User ({modal, toggle, userdata}) {
   return(
-    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+    <Modal isOpen={modal} toggle={toggle} >
       <ModalHeader >User details</ModalHeader>
       <ModalBody>
-        username - {this.state.userdata.username}
-        fullname - {this.state.userdata.name}
-        email - {this.state.userdata.email}
-        website - {this.state.userdata.website}
-        companydetails - {this.state.userdata.companydetails}
+        <ListGroupItem>username - {userdata.username}</ListGroupItem>
+        fullname - {userdata.name}
+        email - {userdata.email}
+        website - {userdata.website}
+        companydetails - {userdata.companydetails}
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={this.toggle}>Ok</Button>{' '}
-        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+        <Button color="primary" onClick={toggle}>Ok</Button>{' '}
+        <Button color="secondary" onClick={toggle}>Cancel</Button>
       </ModalFooter>
     </Modal>
   )
