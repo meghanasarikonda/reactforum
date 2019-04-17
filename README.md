@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Note - The available data from [https://jsonplaceholder.typicode.com/](https://jsonplaceholder.typicode.com/) is in Latin
+The entire application is accessible via keyboard/ possibly screen reader
 
 ## Available Scripts
 
