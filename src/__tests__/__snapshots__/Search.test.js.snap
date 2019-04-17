@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search should render correctly 1`] = `
+<div>
+  <Button
+    color="secondary"
+    onClick={[Function]}
+    tag="button"
+  >
+    Search by Username
+  </Button>
+  <Modal
+    autoFocus={true}
+    backdrop={true}
+    backdropTransition={
+      Object {
+        "mountOnEnter": true,
+        "timeout": 150,
+      }
+    }
+    centered={false}
+    fade={true}
+    isOpen={false}
+    keyboard={true}
+    modalTransition={
+      Object {
+        "timeout": 300,
+      }
+    }
+    onClosed={[Function]}
+    onOpened={[Function]}
+    role="dialog"
+    toggle={[Function]}
+    zIndex={1050}
+  >
+    <ModalBody
+      tag="div"
+    >
+      <input
+        onChange={[Function]}
+        placeholder="Select or Search for..."
+      />
+      <Suggestions
+        click={[Function]}
+        results={Array []}
+      />
+    </ModalBody>
+    <ModalFooter
+      tag="div"
+    >
+      <Button
+        color="secondary"
+        onClick={[Function]}
+        tag="button"
+      >
+        Cancel
+      </Button>
+    </ModalFooter>
+  </Modal>
+</div>
+`;

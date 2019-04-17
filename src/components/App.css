@@ -4,7 +4,20 @@
 
 .displayposts {
   line-height: 1cm;
-  border-style: dotted;
+  cursor: pointer;
+}
+
+.displayposts:hover {
+  background: rgba(25, 26, 24, 0.384);
+  color: white;
+}
+
+.search {
+  margin-top: 20px;
+  z-index: 1;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
 }
 
 .App-logo {

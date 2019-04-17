@@ -1,21 +1,26 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroup, ListGroupItem } from 'reactstrap';
+import PropTypes from 'prop-types';
+import './Post.css';
 
-function User ({modal, toggle, comments, postbody}) {
+function Post ({modal, toggle, comments, postbody}) {
   return(
     <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader >Post details</ModalHeader>
           <ModalBody>
-          {postbody()}
-          </ModalBody>
-          <ModalBody>
-            <h1>break</h1>
-            {comments.map(comment => 
-              <div key={comment.id}>
-                <h4>{comment.name}</h4>
-                <p>{comment.body}</p>
-                <h4>{comment.email}</h4>
+            {
+              <div>
+                <b>{postbody.title}</b>
+                <p>by <b>{postbody.username}</b></p>
               </div>
+            }
+            <p>Comments</p>
+            {comments.map(comment => 
+              <ListGroup key={comment.id}>
+                <ListGroupItem className="name">{comment.name}</ListGroupItem>
+                <ListGroupItem>{comment.body}</ListGroupItem>
+                <ListGroupItem>{comment.email}</ListGroupItem>
+              </ListGroup>
             )}
           </ModalBody>
           <ModalFooter>
@@ -26,4 +31,13 @@ function User ({modal, toggle, comments, postbody}) {
   )
 }
 
-export default User;
+Post.propTypes = {
+  modal: PropTypes.bool,
+  toggle: PropTypes.func,
+  comments: PropTypes.array,
+  postbody: PropTypes.object
+}
+
+
+
+export default Post;

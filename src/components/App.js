@@ -1,187 +1,194 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import axios from "axios";
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import Search from './Search';
-import User from './User';
-import Post from './Post';
+
+const User = React.lazy(() => import("./User"));
+const Post = React.lazy(() => import("./Post"));
 
 class App extends Component {
 
   constructor() {
     super();
+
     this.state = {
-      postdata: [],
-      userArr: [],
-      userdata: {username: 'meghana'},
+      posts: [],
+      usernameArr: ['first'],
+      userdata: [],
+      currentUserData: {},
       comments: [],
       modal: false,
       postmodal: false,
+      searchmodal: false,
+      currentUserName: '',
       currentPost: '',
-      currentUserName: ''
     }
 
     this.toggle = this.toggle.bind(this);
-    this.togglepost = this.togglepost.bind(this);
-    this.postbody = this.postbody.bind(this);
+    this.handlePostClick = this.handlePostClick.bind(this);
+    this.handleUsernameClick = this.handleUsernameClick.bind(this)
+    this.handleSearchUsernameClick = this.handleSearchUsernameClick.bind(this)
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      postmodal: false,
-      modal: !prevState.modal
-    }));
+  toggle(status) {
+    return () => (
+      this.setState(prevState => ({
+        [`${status}`]: !prevState[`${status}`]
+      }))
+    );
   }
 
-  togglepost() {
-    this.setState(prevState => ({
-      postmodal: !prevState.postmodal
-    }));
-  }
+  async getUser(id) {
 
-  getUser(id) {
-    const fetchUser = async () => {
-      try {
-        let user = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
-        if(!this.state.userArr[id]) {
-          let userarr = this.state.userArr;
-          userarr[id] = user.data.username
-          console.log(this.state.userArr, 'userArr')
-          this.setState({userArr: userarr})
-        }
-      }
-      catch (error) {
-        console.log(error);
+    try {
+      let user = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+      if(!this.state.usernameArr[id]) {
+        let usernameArr = this.state.usernameArr;
+        usernameArr[id] = await user.data.username
+        let userdata = this.state.userdata
+        userdata[id] = await user.data
+        // console.log(this.state.usernameArr, 'usernameArr')
+        this.setState({
+          usernameArr,
+          userdata
+        })
       }
     }
-    fetchUser(id);
+    catch (error) {
+      console.log(error);
+    }
+
+  }
+  
+
+  handleSearchUsernameClick(e) {
+    console.log('comee')
+    return this.handleUsernameClick(e);
   }
 
   handleUsernameClick(e) {
-    alert('username first')
+
+    e.preventDefault();
     e.stopPropagation();
-    console.log(e.target.dataset.id, 'id', this.state.userArr)
-    let uniqueUser = async () => {
-      let userdata = await axios.get(`https://jsonplaceholder.typicode.com/users/${e.target.dataset.id}`);
-      this.setState({
-        userdata: userdata.data
-      })
-      return console.log(userdata.data, 'data')
-    }
-    uniqueUser();
-    e.preventDefault();
-    this.setState({
-      modal: true
-    })
-    console.log(e.target.dataset.id, 'id')
-    // async function user() {
-    //   await axios.get(`https://jsonplaceholder.typicode.com/users/${e.target.dataset.id}`)
-    // }
-  }
-
-  postbody() {
-    return (
-      <div>
-        <h4>Title - {this.state.currentPost.title}</h4>
-        <h4>Username - {this.state.currentUserName}</h4>
-      </div>
-    )
-  }
-
-  handlePostClick(e) {
-    alert('post first')
-    e.preventDefault();
-    console.log('postClick', e.currentTarget.dataset.userid);
-    this.setState({
-      currentPost : this.state.postdata[e.currentTarget.dataset.post - 1],
-      currentUserName : this.state.userArr[e.currentTarget.dataset.userid]
-    })
+    const {target: {dataset: {id}}} = e
     
-    let uniquePost = async () => {
-      let comments = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${e.currentTarget.dataset.post}`);
-      this.setState({
-        comments: comments.data
-      })
-      return console.log(comments.data, 'data')
+    this.setState({
+      modal: true,
+      currentUserData: this.state.userdata[id]
+    })
+ 
+  }
+
+  async handlePostClick({currentTarget: {dataset: {userid, postid}}}) {
+    
+    // console.log('postClick', e.currentTarget.dataset.userid);
+    // this.setState({
+      
+    // })
+
+    let currentPost = this.state.posts[postid - 1]['title'];
+    // console.log(this.state.usernameArr, 'usernameaeee', e.currentTarget.dataset.userid)
+    let currentUserName = this.state.usernameArr[userid];// e.currentTarget.dataset.userid
+    
+    if (this.state.currentPost !== currentPost) {
+      
+        console.log(`in heree`)
+        let comments = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postid}`);
+        // console.log(await comments.data)
+        this.setState({
+          currentPost,
+          currentUserName,
+          comments: await comments.data,
+          postmodal: true
+        })
+      }
+      console.log(`${currentPost} current possst ${this.state.currentPost !== currentPost}`)
+      
     }
-    uniquePost();
+    
 
     // let userData = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${e.target.dataset.post}`);
-    console.log(e.currentTarget.dataset.userid, e.currentTarget.dataset.post)
-    if (!this.state.modal) {
-      this.setState({
-        postmodal: true
-      })
-    }
+    
+      
+    
+  
+
+  async componentDidMount() {
+    this.axiosCancelSource = axios.CancelToken.source()
+    let posts = await axios.get("https://jsonplaceholder.typicode.com/posts/");
+    console.log(`${posts.data} post dataaaa`)
+    await posts.data.map(post => {
+      return this.getUser(post.userId)
+    });
+    this.setState(
+      {posts: await posts.data}
+    );
   }
 
-  componentDidMount() {
-    const fetchData = async () => {
-      let posts = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-      posts.data.map(post => {
-        return this.getUser(post.userId)
-      });
-      this.setState({postdata: posts.data});
-    };
-    fetchData();
+  componentWillUnmount() {
+    console.log('unmount component')
+    this.axiosCancelSource.cancel('Component unmounted.')
   }
 
   render() {
     return (
-      <div className="App">
-        <Search usernameArr={this.state.userArr}/>
-        <h1>Hello</h1>
+      <div className="container">
+        <div className="search">
+          <Search usernameArr={this.state.usernameArr} toggleUser={this.toggle('modal')}  handleUsernameClick={this.handleSearchUsernameClick}/>
+        </div>
+        <h2>Posts</h2>
         <ListGroup>
-        {this.state.postdata.map(post => 
-          <ListGroupItem data-post={post.id} data-userid={post.userId} key={post.id} className="displayposts" onClick={this.handlePostClick.bind(this)}>
-            <h4>{post.title}</h4>
-            <a href="#" data-id={post.userId} onClick={this.handleUsernameClick.bind(this)}>{this.state.userArr[post.userId]}</a>
+        {this.state.posts.map(post => 
+          <ListGroupItem 
+            tabIndex="0"
+            data-postid={post.id} 
+            data-userid={post.userId} 
+            key={post.id} 
+            className="displayposts" 
+            onClick={this.handlePostClick}
+            onKeyDown={
+              async (e) => (e.keyCode === 13) ? await this.handlePostClick(e):""
+            }
+          >
+            <article>{post.title}</article>
+            <a 
+              href="0"
+              tabIndex="0"
+              data-id={post.userId} 
+              onClick={this.handleUsernameClick}
+              onKeyDown={
+                (e) => (e.keyCode === 13) ? this.handleUsernameClick(e):""
+              }
+            >
+              {this.state.usernameArr[post.userId]}
+            </a>
           </ListGroupItem>
         )}
         </ListGroup>
-        {/* <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader >User details</ModalHeader>
-          <ModalBody>
-            username - {this.state.userdata.username}
-            fullname - {this.state.userdata.name}
-            email - {this.state.userdata.email}
-            website - {this.state.userdata.website}
-            companydetails - {this.state.userdata.companydetails}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>Ok</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-          </ModalFooter>
-        </Modal> */}
+        <Suspense fallback={<div>Loading...</div>}>
 
-        <User modal={this.state.modal} toggle={this.toggle} userdata={this.state.userdata} />
+          <User modal={this.state.modal} toggle={this.toggle('modal')} userdata={this.state.currentUserData} />
+          <Post modal={this.state.postmodal} toggle={this.toggle('postmodal')} comments={this.state.comments} postbody={{ title: this.state.currentPost, username: this.state.currentUserName}}/>
 
-        <Post modal={this.state.postmodal} toggle={this.togglepost} postdata={this.state.postdata} comments={this.state.comments} postbody={this.postbody}/>
-
-        {/* <Modal isOpen={this.state.postmodal && !this.state.modal} toggle={this.togglepost}>
-        <ModalHeader >Post details</ModalHeader>
-          <ModalBody>
-          {this.postbody()}
-          </ModalBody>
-          <ModalBody>
-            <h1>break</h1>
-            {this.state.comments.map(comment => 
-              <div key={comment.id}>
-                <h4>{comment.name}</h4>
-                <p>{comment.body}</p>
-                <h4>{comment.email}</h4>
-              </div>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.togglepost}>Ok</Button>{' '}
-            <Button color="secondary" onClick={this.togglepost}>Cancel</Button>
-          </ModalFooter>
-        </Modal> */}
-      
+        </Suspense>
       </div>
     );
   }
+}
+
+App.propTypes = {
+  posts: PropTypes.array,
+  usernameArr: PropTypes.array,
+  userdata: PropTypes.object,
+  currentPost: PropTypes.string,
+  currentUserName: PropTypes.string,
+  modal: PropTypes.bool,
+  postmodal: PropTypes.bool,
+  toggle: PropTypes.func,
+  comments: PropTypes.array,
+  postbody: PropTypes.object
 }
 
 export default App;

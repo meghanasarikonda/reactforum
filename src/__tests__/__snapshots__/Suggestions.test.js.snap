@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Suggestions should render correctly 1`] = `
+<span>
+  <div
+    key="1"
+  >
+    <a
+      data-id={1}
+      href="0"
+      key="1"
+      onClick={[MockFunction]}
+    >
+      Meghana
+    </a>
+  </div>
+</span>
+`;

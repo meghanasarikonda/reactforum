@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User should render correctly 1`] = `
+<Modal
+  autoFocus={true}
+  backdrop={true}
+  backdropTransition={
+    Object {
+      "mountOnEnter": true,
+      "timeout": 150,
+    }
+  }
+  centered={false}
+  fade={true}
+  isOpen={false}
+  keyboard={true}
+  modalTransition={
+    Object {
+      "timeout": 300,
+    }
+  }
+  onClosed={[Function]}
+  onOpened={[Function]}
+  role="dialog"
+  toggle={[MockFunction]}
+  zIndex={1050}
+>
+  <ModalHeader
+    charCode={215}
+    closeAriaLabel="Close"
+    tag="h5"
+    wrapTag="div"
+  >
+    User details
+  </ModalHeader>
+  <ModalBody
+    tag="div"
+  >
+    <ListGroup
+      tag="ul"
+    >
+      <ListGroupItem
+        tag="li"
+      >
+        username - 
+        meghana
+      </ListGroupItem>
+      <ListGroupItem
+        tag="li"
+      >
+        fullname - 
+      </ListGroupItem>
+      <ListGroupItem
+        tag="li"
+      >
+        email - 
+        meghana@mail.com
+      </ListGroupItem>
+      <ListGroupItem
+        tag="li"
+      >
+        website - 
+        meghana.dev
+      </ListGroupItem>
+      <ListGroupItem
+        tag="li"
+      >
+        companydetails - 
+        <Component />
+      </ListGroupItem>
+    </ListGroup>
+  </ModalBody>
+  <ModalFooter
+    tag="div"
+  >
+    <Button
+      color="primary"
+      onClick={[MockFunction]}
+      tag="button"
+    >
+      Ok
+    </Button>
+     
+    <Button
+      color="secondary"
+      onClick={[MockFunction]}
+      tag="button"
+    >
+      Cancel
+    </Button>
+  </ModalFooter>
+</Modal>
+`;

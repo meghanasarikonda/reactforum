@@ -1,12 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Suggestions = (props) => {
-  const options = props.results.map(username => (
-    <li key={username}>
-      {username}
-    </li>
+const Suggestions = ({results, click}) => {
+
+  const options = results.map(({id, username}) => (
+    <div key={id}>
+      <a href="0" data-id={id} key={id} onClick={click}>
+        {username}
+      </a>
+    </div>
   ))
-  return <ul>{options}</ul>
+  console.log(options, 'options')
+  return <div>{options}</div>
+}
+
+Suggestions.propTypes = {
+  results: PropTypes.array,
+  click: PropTypes.func
 }
 
 export default Suggestions;
