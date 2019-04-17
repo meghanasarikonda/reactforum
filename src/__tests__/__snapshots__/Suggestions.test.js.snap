@@ -1,18 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Suggestions should render correctly 1`] = `
-<span>
+<div>
   <div
+    aria-label="selectUsername"
     key="1"
   >
     <a
+      aria-labelledby="selectUsername"
       data-id={1}
       href="0"
       key="1"
       onClick={[MockFunction]}
+      role="button"
     >
       Meghana
     </a>
   </div>
-</span>
+</div>
 `;

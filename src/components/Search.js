@@ -11,6 +11,7 @@ class Search extends Component {
     this.state = {
       query: '',
       results: [],
+      modal: false
     }
 
     this.toggle = this.toggle.bind(this);
@@ -25,18 +26,15 @@ class Search extends Component {
 
   async handleSuggestionClick(e) {
     
-      e.preventDefault();
-      e.stopPropagation();
-      console.log(e.target.dataset.id, 'cool');
-      this.props.handleUsernameClick(e);
-      setTimeout(this.toggle, 1000)
-      
-    
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.handleUsernameClick(e);
+    this.toggle();
     
   }
 
   getInfo() {
-    console.log(this.props.usernameArr, 'usernameArr')
+    
     let query = this.state.query;
     let results = [];
 
@@ -51,7 +49,7 @@ class Search extends Component {
       } 
       return false
     })
-    console.log(result, 'resssss')
+    
     this.setState({
       results: result
     })
@@ -73,7 +71,8 @@ class Search extends Component {
   render() {
     return (
       <div>
-        <Button
+        <Button 
+          aria-label={'search for username'}
           onClick={this.toggle}
         >
           Search by Username
@@ -90,7 +89,7 @@ class Search extends Component {
             
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={() => this.setState({modal: false})}>Cancel</Button>
+            <Button aria-label="cancelSearchModal" color="secondary" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
         
         </Modal>
@@ -101,9 +100,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  usernameArr: PropTypes.array,
-  toggleUser: PropTypes.func,
-  handleUsernameClick: PropTypes.func 
+  usernameArr: PropTypes.array.isRequired,
+  toggleUser: PropTypes.func.isRequired,
+  handleUsernameClick: PropTypes.func.isRequired 
 }
 
 

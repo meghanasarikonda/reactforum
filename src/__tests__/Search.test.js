@@ -68,7 +68,7 @@ describe('Search', () => {
 
   it('Should have handleClick method', () => {
     const { enzymeWrapper } = setup();
-    expect(Object.keys(enzymeWrapper.instance()).includes('handleClick')).toBe(true)
+    expect(Object.keys(enzymeWrapper.instance()).includes('toggle')).toBe(true)
   });
 
   it('Should have handleInputChange method', () => {
@@ -113,7 +113,7 @@ describe('Modal body', () => {
 
   it('input text', () => {
     const { enzymeWrapper } = setup();
-    console.log(enzymeWrapper.find('input').text())
+    expect(enzymeWrapper.find('input').text()).toEqual('')
   })
 
   it('should have suggestions as child', () => {

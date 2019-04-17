@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Enzyme, { shallow, mount, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import axios from 'axios';
 import App from '../components/App';
 import MockAdapter from 'axios-mock-adapter';
@@ -70,18 +70,13 @@ describe('App', () => {
   it('setState of usernameArr on mounting component', async() => {
     const { enzymeWrapper } = setup();
      await enzymeWrapper.instance().componentDidMount()
-    console.log(await (enzymeWrapper.state()))
+    await (enzymeWrapper.state())
     expect( await enzymeWrapper.state().usernameArr).toEqual([ 'first', 'meghana' ])
   })
 
   it('should have a ListGroup',() => {
     const { enzymeWrapper } = setup()
     expect(enzymeWrapper.find('ListGroup').length).toEqual(1)
-  })
-
-  it('should have handleSearchUsernameClick method', () => {
-    const { enzymeWrapper } = setup()
-    expect(typeof enzymeWrapper.instance().handleSearchUsernameClick).toEqual('function')
   })
 
   it('should have toggle method', () => {
@@ -173,7 +168,7 @@ describe('ListGroupItem', () => {
     expect(usernameClick.mock.calls.length).toBe(1);
   })
 
-  test('handleUsername Click', () => {
+  test('handleUsername Click', async() => {
 
     const { enzymeWrapper } = setup()
 
@@ -191,8 +186,8 @@ describe('ListGroupItem', () => {
     const {target: {dataset: {id}}} = mockedEvent
 
     
-    enzymeWrapper.instance().handleUsernameClick(mockedEvent)
-    expect(enzymeWrapper.state().modal).toEqual(true)
+    await enzymeWrapper.instance().handleUsernameClick(mockedEvent)
+    expect(await enzymeWrapper.state().modal).toEqual(true)
     expect(enzymeWrapper.state().currentUserData).toEqual(enzymeWrapper.state().posts[id])
     
   })

@@ -3,6 +3,7 @@
 exports[`Search should render correctly 1`] = `
 <div>
   <Button
+    aria-label="search for username"
     color="secondary"
     onClick={[Function]}
     tag="button"
@@ -49,6 +50,7 @@ exports[`Search should render correctly 1`] = `
       tag="div"
     >
       <Button
+        aria-label="cancelSearchModal"
         color="secondary"
         onClick={[Function]}
         tag="button"

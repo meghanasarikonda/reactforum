@@ -23,19 +23,19 @@ function Post ({modal, toggle, comments, postbody}) {
               </ListGroup>
             )}
           </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={toggle}>Ok</Button>{' '}
-            <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <ModalFooter aria-label="postFooter">
+            <Button aria-labelledby="postFooter ok" color="primary" onClick={toggle}>Ok</Button>{' '}
+            <Button aria-labelledby="postFooter cancel" color="secondary" onClick={toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
   )
 }
 
 Post.propTypes = {
-  modal: PropTypes.bool,
-  toggle: PropTypes.func,
+  modal: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
   comments: PropTypes.array,
-  postbody: PropTypes.object
+  postbody: PropTypes.object.isRequired
 }
 
 

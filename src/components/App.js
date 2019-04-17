@@ -21,7 +21,6 @@ class App extends Component {
       comments: [],
       modal: false,
       postmodal: false,
-      searchmodal: false,
       currentUserName: '',
       currentPost: '',
     }
@@ -29,7 +28,6 @@ class App extends Component {
     this.toggle = this.toggle.bind(this);
     this.handlePostClick = this.handlePostClick.bind(this);
     this.handleUsernameClick = this.handleUsernameClick.bind(this)
-    this.handleSearchUsernameClick = this.handleSearchUsernameClick.bind(this)
   }
 
   toggle(status) {
@@ -49,11 +47,12 @@ class App extends Component {
         usernameArr[id] = await user.data.username
         let userdata = this.state.userdata
         userdata[id] = await user.data
-        // console.log(this.state.usernameArr, 'usernameArr')
+
         this.setState({
           usernameArr,
-          userdata
+          userdata: await userdata
         })
+
       }
     }
     catch (error) {
@@ -61,14 +60,8 @@ class App extends Component {
     }
 
   }
-  
 
-  handleSearchUsernameClick(e) {
-    console.log('comee')
-    return this.handleUsernameClick(e);
-  }
-
-  handleUsernameClick(e) {
+  async handleUsernameClick(e) {
 
     e.preventDefault();
     e.stopPropagation();
@@ -76,49 +69,34 @@ class App extends Component {
     
     this.setState({
       modal: true,
-      currentUserData: this.state.userdata[id]
+      currentUserData: await this.state.userdata[id]
     })
  
   }
 
   async handlePostClick({currentTarget: {dataset: {userid, postid}}}) {
-    
-    // console.log('postClick', e.currentTarget.dataset.userid);
-    // this.setState({
-      
-    // })
 
     let currentPost = this.state.posts[postid - 1]['title'];
-    // console.log(this.state.usernameArr, 'usernameaeee', e.currentTarget.dataset.userid)
-    let currentUserName = this.state.usernameArr[userid];// e.currentTarget.dataset.userid
+    let currentUserName = this.state.usernameArr[userid];
     
     if (this.state.currentPost !== currentPost) {
       
-        console.log(`in heree`)
         let comments = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postid}`);
-        // console.log(await comments.data)
+        
         this.setState({
           currentPost,
           currentUserName,
           comments: await comments.data,
           postmodal: true
         })
-      }
-      console.log(`${currentPost} current possst ${this.state.currentPost !== currentPost}`)
-      
     }
-    
-
-    // let userData = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${e.target.dataset.post}`);
-    
       
-    
-  
+  }
 
   async componentDidMount() {
     this.axiosCancelSource = axios.CancelToken.source()
     let posts = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-    console.log(`${posts.data} post dataaaa`)
+    
     await posts.data.map(post => {
       return this.getUser(post.userId)
     });
@@ -128,7 +106,6 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    console.log('unmount component')
     this.axiosCancelSource.cancel('Component unmounted.')
   }
 
@@ -136,13 +113,19 @@ class App extends Component {
     return (
       <div className="container">
         <div className="search">
-          <Search usernameArr={this.state.usernameArr} toggleUser={this.toggle('modal')}  handleUsernameClick={this.handleSearchUsernameClick}/>
+          <Search 
+            usernameArr={this.state.usernameArr} 
+            toggleUser={this.toggle('modal')}  
+            handleUsernameClick={this.handleUsernameClick}
+          />
         </div>
         <h2>Posts</h2>
         <ListGroup>
         {this.state.posts.map(post => 
           <ListGroupItem 
             tabIndex="0"
+            role="button"
+            aria-label={`click post`}
             data-postid={post.id} 
             data-userid={post.userId} 
             key={post.id} 
@@ -154,12 +137,15 @@ class App extends Component {
           >
             <article>{post.title}</article>
             <a 
+              className="username"
               href="0"
               tabIndex="0"
+              role="button"
+              aria-label={ `click username`}
               data-id={post.userId} 
               onClick={this.handleUsernameClick}
               onKeyDown={
-                (e) => (e.keyCode === 13) ? this.handleUsernameClick(e):""
+                async (e) => (e.keyCode === 13) ? await this.handleUsernameClick(e):""
               }
             >
               {this.state.usernameArr[post.userId]}
@@ -169,8 +155,17 @@ class App extends Component {
         </ListGroup>
         <Suspense fallback={<div>Loading...</div>}>
 
-          <User modal={this.state.modal} toggle={this.toggle('modal')} userdata={this.state.currentUserData} />
-          <Post modal={this.state.postmodal} toggle={this.toggle('postmodal')} comments={this.state.comments} postbody={{ title: this.state.currentPost, username: this.state.currentUserName}}/>
+          <User 
+            modal={this.state.modal} 
+            toggle={this.toggle('modal')} 
+            userdata={this.state.currentUserData} 
+          />
+          <Post 
+            modal={this.state.postmodal} 
+            toggle={this.toggle('postmodal')} 
+            comments={this.state.comments} 
+            postbody={{ title: this.state.currentPost, username: this.state.currentUserName}}
+          />
 
         </Suspense>
       </div>

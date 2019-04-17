@@ -65,25 +65,28 @@ exports[`User should render correctly 1`] = `
       <ListGroupItem
         tag="li"
       >
-        companydetails - 
-        <Component />
+        companyname - 
       </ListGroupItem>
     </ListGroup>
   </ModalBody>
   <ModalFooter
+    aria-label="userFooter"
     tag="div"
   >
     <Button
+      aria-labelledby="userFooter ok"
       color="primary"
       onClick={[MockFunction]}
+      tabIndex={1}
       tag="button"
     >
       Ok
     </Button>
-     
     <Button
+      aria-labelledby="userFooter cancel"
       color="secondary"
       onClick={[MockFunction]}
+      tabIndex={1}
       tag="button"
     >
       Cancel

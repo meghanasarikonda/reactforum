@@ -48,9 +48,11 @@ exports[`Post should render correctly 1`] = `
     </p>
   </ModalBody>
   <ModalFooter
+    aria-label="postFooter"
     tag="div"
   >
     <Button
+      aria-labelledby="postFooter ok"
       color="primary"
       onClick={[MockFunction]}
       tag="button"
@@ -59,6 +61,7 @@ exports[`Post should render correctly 1`] = `
     </Button>
      
     <Button
+      aria-labelledby="postFooter cancel"
       color="secondary"
       onClick={[MockFunction]}
       tag="button"
